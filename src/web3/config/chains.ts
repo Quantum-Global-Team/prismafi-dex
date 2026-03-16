@@ -16,7 +16,7 @@ export const moonbaseAlpha = defineChain({
     default: {
       http: [
         process.env.NEXT_PUBLIC_RPC_URL ??
-          "https://rpc.api.moonbase.moonbeam.network",
+        "https://rpc.api.moonbase.moonbeam.network",
       ],
       webSocket: ["wss://wss.api.moonbase.moonbeam.network"],
     },
