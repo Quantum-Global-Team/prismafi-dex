@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="dark"
+      className={cn("dark", "font-sans", fontSans.variable)}
       suppressHydrationWarning
     >
       <body
