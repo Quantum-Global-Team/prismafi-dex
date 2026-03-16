@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 export function MarketsPanelShell() {
   return (
-    <Card className="border-border-subtle bg-bg-panel">
+    <Card className="border-border-subtle bg-bg-panel border-top-accent">
       <CardHeader className="px-4 pb-2 pt-4">
         <div className="flex items-center justify-between">
           <span className="text-xs font-mono font-medium tracking-widest text-text-secondary uppercase">

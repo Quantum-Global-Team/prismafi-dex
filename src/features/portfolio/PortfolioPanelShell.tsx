@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator"
 
 export function PortfolioPanelShell() {
   return (
-    <Card className="border-border-subtle bg-bg-panel">
+    <Card className="border-border-subtle bg-bg-panel border-top-accent">
       <CardHeader className="px-4 pb-3 pt-4">
         <span className="text-xs font-mono font-medium tracking-widest text-text-secondary uppercase">
           Portfolio

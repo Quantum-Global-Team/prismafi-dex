@@ -4,59 +4,58 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ─── Deep Ocean Design Tokens ─────────────────────────────────────────────── */
+/* ─── Cyber Precision Design Tokens ────────────────────────────────────────── */
 :root {
-  /* Tessera semantic tokens */
-  --bg-primary: #0a1a2f;
-  --bg-panel: #1b3355;
-  --border-subtle: #4b6177;
-  --brand-primary: #2ec4b6;
-  --brand-secondary: #0077be;
-  --state-positive: #00e676;
-  --state-negative: #c33f45;
-  --text-primary: #e6eaee;
-  --text-secondary: #a7b2bc;
+  /* Tessera semantic tokens — Cyber Precision */
+  --bg-primary: #080b14;
+  --bg-panel: #0e1425;
+  --bg-elevated: #131b2e;
+  --border-subtle: #1e2d4a;
+  --brand-primary: #7c91ff;
+  --brand-secondary: #4c65ff;
+  --state-positive: #4ade80;
+  --state-negative: #ff4f6a;
+  --text-primary: #cdd6f4;
+  --text-secondary: #6b7ca8;
 
-  /* shadcn/ui token mapping → Deep Ocean */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.153 0.006 107.1);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.153 0.006 107.1);
-  --primary: oklch(0.228 0.013 107.4);
-  --primary-foreground: oklch(0.988 0.003 106.5);
-  --secondary: oklch(0.966 0.005 106.5);
-  --secondary-foreground: oklch(0.228 0.013 107.4);
-  --muted: oklch(0.966 0.005 106.5);
-  --muted-foreground: oklch(0.58 0.031 107.3);
-  --accent: oklch(0.966 0.005 106.5);
-  --accent-foreground: oklch(0.228 0.013 107.4);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.93 0.007 106.5);
-  --input: oklch(0.93 0.007 106.5);
-  --ring: oklch(0.737 0.021 106.9);
-  --radius: 0;
+  /* shadcn/ui token mapping → Cyber Precision */
+  --background: #080b14;
+  --foreground: #cdd6f4;
+  --card: #0e1425;
+  --card-foreground: #cdd6f4;
+  --popover: #0e1425;
+  --popover-foreground: #cdd6f4;
+  --primary: #7c91ff;
+  --primary-foreground: #080b14;
+  --secondary: #131b2e;
+  --secondary-foreground: #cdd6f4;
+  --muted: #131b2e;
+  --muted-foreground: #6b7ca8;
+  --accent: #4c65ff;
+  --accent-foreground: #cdd6f4;
+  --destructive: #ff4f6a;
+  --border: #1e2d4a;
+  --input: #1e2d4a;
+  --ring: #7c91ff;
+  --radius: 0.25rem;
 
   /* Chart semantic tokens */
-  --chart-1: oklch(0.811 0.111 293.571);
-  --chart-2: oklch(0.606 0.25 292.717);
-  --chart-3: oklch(0.541 0.281 293.009);
-  --chart-4: oklch(0.491 0.27 292.581);
-  --chart-5: oklch(0.432 0.232 292.759);
+  --chart-1: #7c91ff;
+  --chart-2: #4ade80;
+  --chart-3: #ff4f6a;
+  --chart-4: #f9c846;
+  --chart-5: #6b7ca8;
 
   /* Sidebar */
-  --sidebar: oklch(0.988 0.003 106.5);
-  --sidebar-foreground: oklch(0.153 0.006 107.1);
-  --sidebar-primary: oklch(0.228 0.013 107.4);
-  --sidebar-primary-foreground: oklch(0.988 0.003 106.5);
-  --sidebar-accent: oklch(0.966 0.005 106.5);
-  --sidebar-accent-foreground: oklch(0.228 0.013 107.4);
-  --sidebar-border: oklch(0.93 0.007 106.5);
-  --sidebar-ring: oklch(0.737 0.021 106.9);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.153 0.006 107.1);
+  --sidebar: #0e1425;
+  --sidebar-foreground: #cdd6f4;
+  --sidebar-primary: #7c91ff;
+  --sidebar-primary-foreground: #080b14;
+  --sidebar-accent: #131b2e;
+  --sidebar-accent-foreground: #cdd6f4;
+  --sidebar-border: #1e2d4a;
+  --sidebar-ring: #7c91ff;
 }
-
-/* Deep Ocean is always-dark — no light/dark class variant needed. */
 
 @theme inline {
   --font-sans: var(--font-sans);
@@ -64,6 +63,7 @@
   /* Tessera semantic utilities */
   --color-bg-primary: var(--bg-primary);
   --color-bg-panel: var(--bg-panel);
+  --color-bg-elevated: var(--bg-elevated);
   --color-border-subtle: var(--border-subtle);
   --color-brand-primary: var(--brand-primary);
   --color-brand-secondary: var(--brand-secondary);
@@ -106,13 +106,13 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Radius scale */
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 3);
+  --radius-4xl: calc(var(--radius) * 4);
 }
 
 @layer base {
@@ -132,36 +132,18 @@
   }
 }
 
-.dark {
-  --background: oklch(0.153 0.006 107.1);
-  --foreground: oklch(0.988 0.003 106.5);
-  --card: oklch(0.228 0.013 107.4);
-  --card-foreground: oklch(0.988 0.003 106.5);
-  --popover: oklch(0.228 0.013 107.4);
-  --popover-foreground: oklch(0.988 0.003 106.5);
-  --primary: oklch(0.93 0.007 106.5);
-  --primary-foreground: oklch(0.228 0.013 107.4);
-  --secondary: oklch(0.286 0.016 107.4);
-  --secondary-foreground: oklch(0.988 0.003 106.5);
-  --muted: oklch(0.286 0.016 107.4);
-  --muted-foreground: oklch(0.737 0.021 106.9);
-  --accent: oklch(0.286 0.016 107.4);
-  --accent-foreground: oklch(0.988 0.003 106.5);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.58 0.031 107.3);
-  --chart-1: oklch(0.811 0.111 293.571);
-  --chart-2: oklch(0.606 0.25 292.717);
-  --chart-3: oklch(0.541 0.281 293.009);
-  --chart-4: oklch(0.491 0.27 292.581);
-  --chart-5: oklch(0.432 0.232 292.759);
-  --sidebar: oklch(0.228 0.013 107.4);
-  --sidebar-foreground: oklch(0.988 0.003 106.5);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.988 0.003 106.5);
-  --sidebar-accent: oklch(0.286 0.016 107.4);
-  --sidebar-accent-foreground: oklch(0.988 0.003 106.5);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.58 0.031 107.3);
+@layer utilities {
+  /* Subtle indigo glow for interactive / active elements */
+  .glow-accent {
+    box-shadow: 0 0 16px rgba(124, 145, 255, 0.18);
+  }
+
+  .glow-accent-sm {
+    box-shadow: 0 0 8px rgba(124, 145, 255, 0.12);
+  }
+
+  /* Inset top border highlight — cyber panel feel */
+  .border-top-accent {
+    border-top: 1px solid rgba(124, 145, 255, 0.35);
+  }
 }

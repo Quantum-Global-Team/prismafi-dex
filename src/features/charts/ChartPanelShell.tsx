@@ -5,7 +5,7 @@ const TIMEFRAMES = ["1H", "4H", "1D", "1W"] as const
 
 export function ChartPanelShell() {
   return (
-    <Card className="border-border-subtle bg-bg-panel">
+    <Card className="border-border-subtle bg-bg-panel border-top-accent">
       <CardHeader className="flex-row items-center justify-between px-4 pb-2 pt-4">
         <div className="flex items-center gap-3">
           <Skeleton className="h-5 w-24" />
