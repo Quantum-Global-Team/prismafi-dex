@@ -1,7 +1,7 @@
 import { MarketsPanel } from "@/features/markets/MarketsPanel"
 import { ChartPanel } from "@/features/charts/ChartPanel"
 import { SwapPanel } from "@/features/swap/SwapPanel"
-import { PortfolioPanelShell } from "@/features/portfolio/PortfolioPanelShell"
+import { PortfolioPanel } from "@/features/portfolio/PortfolioPanel"
 
 export default function TradingPage() {
   return (
@@ -14,7 +14,7 @@ export default function TradingPage() {
         <ChartPanel />
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           <SwapPanel />
-          <PortfolioPanelShell />
+          <PortfolioPanel />
         </div>
       </div>
     </div>
