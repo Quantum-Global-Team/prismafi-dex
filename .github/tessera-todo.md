@@ -356,8 +356,8 @@ src/
 - [ ] stage 4: demo-ready testnet flow
 
 ### 8.2 Mock datasets
-- [ ] token metadata
-- [ ] supported pairs
+- [x] token metadata
+- [x] supported pairs
 - [ ] balances
 - [ ] market overview data
 - [ ] OHLC chart data
@@ -365,31 +365,31 @@ src/
 - [ ] portfolio notional values
 
 ### 8.3 Off-chain data policy
-- [ ] keep chart/history data replaceable
-- [ ] use adapters for any external data source
-- [ ] avoid coupling UI directly to raw API responses
-- [ ] support graceful failure if external data is unavailable
+- [x] keep chart/history data replaceable
+- [x] use adapters for any external data source
+- [x] avoid coupling UI directly to raw API responses
+- [x] support graceful failure if external data is unavailable
 
 ---
 
 ## 9. Markets feature
 
 ### 9.1 Market model
-- [ ] define typed market pair model
-- [ ] define price format rules
-- [ ] define 24h change model
+- [x] define typed market pair model
+- [x] define price format rules
+- [x] define 24h change model
 - [ ] define liquidity/TVL model
 
 ### 9.2 Markets table
-- [ ] create market table component
-- [ ] create row component
-- [ ] add pair badge
-- [ ] add price column
-- [ ] add 24h change column
+- [x] create market table component
+- [x] create row component
+- [x] add pair badge
+- [x] add price column
+- [x] add 24h change column
 - [ ] add volume or TVL column
-- [ ] add loading state
+- [x] add loading state
 - [ ] add empty state
-- [ ] add hover and active row styling
+- [x] add hover and active row styling
 - [ ] add responsive behavior
 
 ### 9.3 Market interactions
