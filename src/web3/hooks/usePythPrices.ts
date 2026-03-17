@@ -65,15 +65,15 @@ export function usePythPrices(feedIds: string[]): UsePythPricesResult {
       for (const id of ids) {
         params.append("ids[]", id)
       }
-      params.set("parsed", "true")
 
+      // Use Next.js API route as CORS-safe proxy
       const res = await fetch(
-        `${PYTH_HERMES_URL}/v2/updates/price/latest?${params.toString()}`,
+        `/api/pyth/prices?${params.toString()}`,
         { cache: "no-store" },
       )
 
       if (!res.ok) {
-        throw new Error(`Hermes API error: ${res.status} ${res.statusText}`)
+        throw new Error(`Pyth proxy error: ${res.status} ${res.statusText}`)
       }
 
       const data: PythHermesResponse = await res.json()

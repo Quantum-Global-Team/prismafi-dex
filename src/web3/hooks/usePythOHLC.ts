@@ -72,13 +72,14 @@ export function usePythOHLC(
         to: String(now),
       })
 
+      // Use Next.js API route as CORS-safe proxy
       const res = await fetch(
-        `${PYTH_BENCHMARKS_URL}/v1/shims/tradingview/history?${params.toString()}`,
+        `/api/pyth/ohlc?${params.toString()}`,
         { cache: "no-store" },
       )
 
       if (!res.ok) {
-        throw new Error(`Benchmarks API error: ${res.status}`)
+        throw new Error(`Pyth OHLC proxy error: ${res.status}`)
       }
 
       const data: BenchmarksResponse = await res.json()

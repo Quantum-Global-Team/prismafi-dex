@@ -49,15 +49,16 @@ export function usePyth24hChange(feedIds: string[]): UsePyth24hChangeResult {
       for (const id of ids) {
         params.append("ids[]", id)
       }
-      params.set("parsed", "true")
+      params.set("timestamp", timestampRef.current.toString())
 
+      // Use Next.js API route as CORS-safe proxy
       const res = await fetch(
-        `${PYTH_HERMES_URL}/v2/updates/price/${timestampRef.current}?${params.toString()}`,
+        `/api/pyth/historical?${params.toString()}`,
         { cache: "force-cache" },
       )
 
       if (!res.ok) {
-        throw new Error(`Hermes historical API error: ${res.status}`)
+        throw new Error(`Pyth historical proxy error: ${res.status}`)
       }
 
       const data: PythHermesResponse = await res.json()

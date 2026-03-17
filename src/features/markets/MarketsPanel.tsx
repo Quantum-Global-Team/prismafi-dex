@@ -98,11 +98,6 @@ export function MarketsPanel() {
             })}
           </div>
         )}
-
-        <p className="mt-4 text-center font-mono text-[10px] text-text-muted">
-          Powered by{" "}
-          <span className="text-brand-secondary">Pyth Network</span>
-        </p>
       </CardContent>
     </Card>
   )
