@@ -8,10 +8,19 @@ import type { TokenMetadata } from "@/types/token"
  * Replace with deployed addresses from src/web3/constants/contracts.ts.
  */
 export const TOKENS = {
+  tUSD: {
+    symbol: "tUSD",
+    name: "Prisma US Dollar",
+    decimals: 6,
+    address: null,
+    chainId: 1287,
+    logoSymbol: "$",
+    priceFeedId: null, // tUSD is pegged 1:1 to USD, no feed needed
+  },
   tEUR: {
     symbol: "tEUR",
     name: "Prisma Euro",
-    decimals: 18,
+    decimals: 6,
     address: null,
     chainId: 1287,
     logoSymbol: "€",
@@ -20,7 +29,7 @@ export const TOKENS = {
   tGBP: {
     symbol: "tGBP",
     name: "Prisma British Pound",
-    decimals: 18,
+    decimals: 6,
     address: null,
     chainId: 1287,
     logoSymbol: "£",
@@ -29,7 +38,7 @@ export const TOKENS = {
   tJPY: {
     symbol: "tJPY",
     name: "Prisma Japanese Yen",
-    decimals: 18,
+    decimals: 6,
     address: null,
     chainId: 1287,
     logoSymbol: "¥",
@@ -52,4 +61,4 @@ export type TokenSymbol = keyof typeof TOKENS
 export const FX_TOKEN_SYMBOLS: TokenSymbol[] = ["tEUR", "tGBP", "tJPY"]
 
 /** The base quote currency for all PrismaFi pairs. */
-export const QUOTE_TOKEN_SYMBOL: TokenSymbol = "USDC"
+export const QUOTE_TOKEN_SYMBOL: TokenSymbol = "tUSD"

@@ -1,4 +1,5 @@
 import type { Address } from "viem"
+import { PYTH_CONTRACT_ADDRESS_MOONBASE } from "./priceFeedIds"
 
 /**
  * Deployed smart contract addresses for PrismaFi DEX on Moonbase Alpha.
@@ -12,20 +13,33 @@ import type { Address } from "viem"
 export const CONTRACTS = {
   /** Main DEX router — executes FX token swaps */
   PrismaRouter: null as Address | null,
-  /** Mock stablecoin (USDC equivalent for testnet) */
-  MockUSDC: null as Address | null,
+  /** Tokenized USD (base quote token) */
+  tUSD: null as Address | null,
   /** Synthetic EUR token */
   tEUR: null as Address | null,
   /** Synthetic GBP token */
   tGBP: null as Address | null,
   /** Synthetic JPY token */
   tJPY: null as Address | null,
-  /**
-   * Pyth oracle adapter used by the router.
-   * The upstream Pyth contract on Moonbase Alpha:
-   * 0xa2aa501b19aff244d90cc15a4cf739d2725b5729
-   */
-  PythOracleAdapter: null as Address | null,
+  /** Mock stablecoin (USDC equivalent for testnet) */
+  USDC: null as Address | null,
 }
 
+/**
+ * Pyth oracle contract on Moonbase Alpha.
+ * Used by PrismaRouter to fetch on-chain FX prices.
+ */
+export const PYTH_CONTRACT = PYTH_CONTRACT_ADDRESS_MOONBASE as Address
+
 export type ContractName = keyof typeof CONTRACTS
+
+/**
+ * Helper to get a contract address, throwing if not deployed.
+ */
+export function getContractAddress(name: ContractName): Address {
+  const address = CONTRACTS[name]
+  if (!address) {
+    throw new Error(`Contract ${name} not deployed. Check src/web3/constants/contracts.ts`)
+  }
+  return address
+}

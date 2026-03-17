@@ -1,14 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowUpDown, Settings2, ChevronDown } from "lucide-react"
+import { ArrowUpDown, Settings2, ChevronDown, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { useSwapQuote } from "@/web3/hooks/useSwapQuote"
+import { useSwapTransaction, type SwapStatus } from "@/web3/hooks/useSwapTransaction"
 import { useWallet } from "@/web3/hooks/useWallet"
 import { useWalletActions } from "@/web3/hooks/useWalletActions"
+import { CONTRACTS } from "@/web3/constants/contracts"
 import {
   FX_TOKEN_SYMBOLS,
   QUOTE_TOKEN_SYMBOL,
@@ -28,10 +30,34 @@ const BASE_TO_TOKEN: Record<string, TokenSymbol> = {
   JPY: "tJPY",
 }
 
+/** Get user-friendly status message */
+function getStatusMessage(status: SwapStatus): string {
+  switch (status) {
+    case "fetching-prices":
+      return "Fetching prices..."
+    case "checking-allowance":
+      return "Checking allowance..."
+    case "approving":
+      return "Approve in wallet..."
+    case "awaiting-approval":
+      return "Awaiting approval..."
+    case "swapping":
+      return "Confirm swap..."
+    case "awaiting-swap":
+      return "Processing swap..."
+    case "success":
+      return "Swap complete!"
+    case "error":
+      return "Swap failed"
+    default:
+      return ""
+  }
+}
+
 export function SwapPanel() {
   const { selectedPair } = useTradingContext()
   const [inputSymbol, setInputSymbol] = useState<TokenSymbol>("tEUR")
-  const [outputSymbol, setOutputSymbol] = useState<TokenSymbol>("USDC")
+  const [outputSymbol, setOutputSymbol] = useState<TokenSymbol>("tUSD")
   const [inputAmount, setInputAmount] = useState("")
   const [slippage, setSlippage] = useState(0.5)
   const [modalSide, setModalSide] = useState<ModalSide>(null)
@@ -40,14 +66,39 @@ export function SwapPanel() {
   const wallet = useWallet()
   const { openConnectModal } = useWalletActions()
 
+  // Swap transaction hook
+  const {
+    status: swapStatus,
+    error: swapError,
+    swapTxHash,
+    executeSwap: performSwap,
+    reset: resetSwap,
+  } = useSwapTransaction(
+    inputSymbol,
+    outputSymbol,
+    inputAmount,
+    quote?.outputAmountAfterFee ?? "0",
+    slippage
+  )
+
+  const isSwapping = !["idle", "success", "error"].includes(swapStatus)
+  const contractsDeployed = !!CONTRACTS.PrismaRouter
+
   // Sync input token with globally selected pair
   useEffect(() => {
     const tokenSymbol = BASE_TO_TOKEN[selectedPair.base]
     if (tokenSymbol) {
       setInputSymbol(tokenSymbol)
-      setOutputSymbol((prev) => (tokenSymbol === prev ? "USDC" : prev))
+      setOutputSymbol((prev) => (tokenSymbol === prev ? "tUSD" : prev))
     }
   }, [selectedPair.base])
+
+  // Reset swap state when inputs change
+  useEffect(() => {
+    if (swapStatus === "success" || swapStatus === "error") {
+      resetSwap()
+    }
+  }, [inputSymbol, outputSymbol, inputAmount, resetSwap, swapStatus])
 
   function handleFlip() {
     setInputSymbol(outputSymbol)
@@ -77,19 +128,35 @@ export function SwapPanel() {
     }
   }
 
+  async function handleSwapClick() {
+    if (!wallet.isConnected) {
+      openConnectModal?.()
+      return
+    }
+    if (canSwap && !isSwapping) {
+      await performSwap()
+    }
+  }
+
   const ctaLabel = (() => {
     if (!wallet.isConnected) return "Connect Wallet"
     if (!wallet.isCorrectNetwork) return "Wrong Network"
+    if (!contractsDeployed) return "Contracts Not Deployed"
     if (!inputAmount || parseFloat(inputAmount) <= 0) return "Enter Amount"
-    if (!quote) return "Fetching Quote…"
+    if (!quote) return "Fetching Quote..."
+    if (isSwapping) return getStatusMessage(swapStatus)
+    if (swapStatus === "success") return "Swap Complete!"
+    if (swapStatus === "error") return "Try Again"
     return "Swap"
   })()
 
   const canSwap =
     wallet.isConnected &&
     wallet.isCorrectNetwork &&
+    contractsDeployed &&
     !!quote &&
-    parseFloat(inputAmount) > 0
+    parseFloat(inputAmount) > 0 &&
+    !isSwapping
 
   return (
     <>
@@ -163,11 +230,13 @@ export function SwapPanel() {
                 <button
                   key={pct}
                   onClick={() => setSlippage(pct)}
+                  disabled={isSwapping}
                   className={cn(
                     "rounded px-2 py-0.5 font-mono text-[10px] transition-colors",
                     slippage === pct
                       ? "bg-brand-primary/15 text-brand-primary"
                       : "text-text-muted hover:text-text-secondary",
+                    isSwapping && "opacity-50 cursor-not-allowed",
                   )}
                 >
                   {pct}%
@@ -176,17 +245,64 @@ export function SwapPanel() {
             </div>
           </div>
 
+          {/* Swap Status */}
+          {swapStatus !== "idle" && (
+            <div
+              className={cn(
+                "flex items-center gap-2 rounded-lg px-3 py-2",
+                swapStatus === "success" && "bg-state-positive/10",
+                swapStatus === "error" && "bg-state-negative/10",
+                isSwapping && "bg-brand-primary/10",
+              )}
+            >
+              {isSwapping && (
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-primary" />
+              )}
+              {swapStatus === "success" && (
+                <CheckCircle2 className="h-3.5 w-3.5 text-state-positive" />
+              )}
+              {swapStatus === "error" && (
+                <AlertCircle className="h-3.5 w-3.5 text-state-negative" />
+              )}
+              <span
+                className={cn(
+                  "font-mono text-[10px]",
+                  swapStatus === "success" && "text-state-positive",
+                  swapStatus === "error" && "text-state-negative",
+                  isSwapping && "text-brand-primary",
+                )}
+              >
+                {getStatusMessage(swapStatus)}
+                {swapError && `: ${swapError}`}
+              </span>
+            </div>
+          )}
+
+          {/* Swap Transaction Link */}
+          {swapTxHash && (
+            <a
+              href={`https://moonbase.moonscan.io/tx/${swapTxHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-center font-mono text-[10px] text-brand-secondary hover:text-brand-primary underline"
+            >
+              View on Explorer
+            </a>
+          )}
+
           {/* CTA */}
           <Button
             className={cn(
               "w-full font-mono text-xs tracking-wider uppercase",
-              canSwap
+              canSwap || swapStatus === "error"
                 ? "bg-brand-primary text-bg-primary hover:bg-brand-secondary glow-brand-sm"
                 : "border border-border-subtle bg-transparent text-text-muted cursor-default",
+              isSwapping && "opacity-75 cursor-wait",
             )}
-            onClick={!wallet.isConnected ? openConnectModal : undefined}
-            disabled={wallet.isConnected && !canSwap}
+            onClick={handleSwapClick}
+            disabled={wallet.isConnected && !canSwap && swapStatus !== "error"}
           >
+            {isSwapping && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
             {ctaLabel}
           </Button>
         </CardContent>

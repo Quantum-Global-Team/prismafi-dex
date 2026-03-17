@@ -24,6 +24,7 @@ type AssetClass = "All" | "Fiat" | "Stable"
 type TokenAssetClass = Exclude<AssetClass, "All">
 
 const TOKEN_CLASS: Record<TokenSymbol, TokenAssetClass> = {
+  tUSD: "Stable",
   tEUR: "Fiat",
   tGBP: "Fiat",
   tJPY: "Fiat",
@@ -37,6 +38,7 @@ const CLASS_TABS: AssetClass[] = ["All", "Fiat", "Stable"]
  * in trigger buttons (e.g. AmountBox in SwapPanel).
  */
 export const TOKEN_ICON_STYLE: Record<TokenSymbol, string> = {
+  tUSD: "bg-emerald-500/20 text-emerald-200 border-emerald-500/25",
   tEUR: "bg-blue-500/20 text-blue-200 border-blue-500/25",
   tGBP: "bg-violet-500/20 text-violet-200 border-violet-500/25",
   tJPY: "bg-amber-500/20 text-amber-200 border-amber-500/25",

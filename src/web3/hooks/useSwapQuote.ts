@@ -4,9 +4,10 @@ import { useMemo } from "react"
 import { usePythPrices } from "@/web3/hooks/usePythPrices"
 import { TOKENS, type TokenSymbol } from "@/web3/constants/tokens"
 
-const USDC_USD_PRICE = 1.0
+/** Price for USD-pegged stablecoins (tUSD, USDC) that don't need oracle feeds */
+const USD_PEGGED_PRICE = 1.0
 
-/** Get the Pyth feed ID for a token, or empty string for USDC (pegged = 1 USD). */
+/** Get the Pyth feed ID for a token, or empty string for USD-pegged tokens */
 function getFeedId(symbol: TokenSymbol): string {
   return TOKENS[symbol].priceFeedId ?? ""
 }
@@ -90,11 +91,11 @@ export function useSwapQuote(
 
     let inputPriceUSD = inputFeedId
       ? (prices.get(inputNorm)?.value ?? null)
-      : USDC_USD_PRICE
+      : USD_PEGGED_PRICE
 
     let outputPriceUSD = outputFeedId
       ? (prices.get(outputNorm)?.value ?? null)
-      : USDC_USD_PRICE
+      : USD_PEGGED_PRICE
 
     if (inputPriceUSD === null || outputPriceUSD === null) return null
 
