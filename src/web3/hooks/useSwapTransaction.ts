@@ -242,12 +242,18 @@ export function useSwapTransaction(
       // Estimate Pyth update fee (typically 1 wei per update)
       const updateFee = BigInt(priceUpdateData.length)
 
+      // Pyth VAA data can be large, requiring higher gas limits on testnet
+      // Estimate: ~21k base + ~16 per data byte + execution overhead
+      const estimatedGas = BigInt(priceUpdateData.length) * BigInt(100) + BigInt(500000)
+      const gasLimit = estimatedGas * BigInt(12) / BigInt(10) // 20% buffer
+
       const swapHash = await writeSwap({
         address: routerAddress,
         abi: PrismaRouterABI,
         functionName: "executeSwap",
         args: [priceUpdateData, inputTokenAddress, outputTokenAddress, amountInWei, minAmountOutWei],
         value: updateFee,
+        gas: gasLimit,
       })
 
       setSwapTxHash(swapHash)

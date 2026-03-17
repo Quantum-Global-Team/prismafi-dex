@@ -1,18 +1,18 @@
 import { PYTH_PRICE_FEED_IDS } from "./priceFeedIds"
+import { CONTRACTS } from "./contracts"
 import type { TokenMetadata } from "@/types/token"
 
 /**
  * Token metadata for all assets supported by PrismaFi DEX.
  *
- * Addresses are placeholders (zero address) until contracts are deployed to testnet.
- * Replace with deployed addresses from src/web3/constants/contracts.ts.
+ * Contract addresses are live on Moonbase Alpha testnet.
  */
 export const TOKENS = {
   tUSD: {
     symbol: "tUSD",
     name: "Prisma US Dollar",
     decimals: 6,
-    address: null,
+    address: CONTRACTS.tUSD,
     chainId: 1287,
     logoSymbol: "$",
     priceFeedId: null, // tUSD is pegged 1:1 to USD, no feed needed
@@ -21,7 +21,7 @@ export const TOKENS = {
     symbol: "tEUR",
     name: "Prisma Euro",
     decimals: 6,
-    address: null,
+    address: CONTRACTS.tEUR,
     chainId: 1287,
     logoSymbol: "€",
     priceFeedId: PYTH_PRICE_FEED_IDS.EUR_USD,
@@ -30,7 +30,7 @@ export const TOKENS = {
     symbol: "tGBP",
     name: "Prisma British Pound",
     decimals: 6,
-    address: null,
+    address: CONTRACTS.tGBP,
     chainId: 1287,
     logoSymbol: "£",
     priceFeedId: PYTH_PRICE_FEED_IDS.GBP_USD,
@@ -39,7 +39,7 @@ export const TOKENS = {
     symbol: "tJPY",
     name: "Prisma Japanese Yen",
     decimals: 6,
-    address: null,
+    address: CONTRACTS.tJPY,
     chainId: 1287,
     logoSymbol: "¥",
     priceFeedId: PYTH_PRICE_FEED_IDS.JPY_USD,
@@ -48,7 +48,7 @@ export const TOKENS = {
     symbol: "USDC",
     name: "USD Coin",
     decimals: 6,
-    address: null,
+    address: CONTRACTS.USDC,
     chainId: 1287,
     logoSymbol: "$",
     priceFeedId: null,
