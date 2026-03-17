@@ -27,15 +27,15 @@ import {
 import { FX_PAIRS } from "@/web3/constants/pairs"
 import { formatPrice, formatChange, changeDirection } from "@/lib/format"
 
-// ── Series styles ────────────────────────────────────────────────────────────
+// ── Series configuration ──────────────────────────────────────────────────────
 
 const CANDLE_STYLE: DeepPartial<CandlestickSeriesOptions> = {
   upColor: "#2EE6A6",
   downColor: "#FF5C7A",
   borderUpColor: "#2EE6A6",
   borderDownColor: "#FF5C7A",
-  wickUpColor: "rgba(46,230,166,0.6)",
-  wickDownColor: "rgba(255,92,122,0.6)",
+  wickUpColor: "rgba(46,230,166,0.65)",
+  wickDownColor: "rgba(255,92,122,0.65)",
 }
 
 const VOLUME_STYLE: DeepPartial<HistogramSeriesOptions> = {
@@ -44,23 +44,22 @@ const VOLUME_STYLE: DeepPartial<HistogramSeriesOptions> = {
   priceLineVisible: false,
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 type VolBar = { time: OhlcBar["time"]; value: number; color: string }
 
-/** Derive a normalized volatility proxy from OHLC range (no real FX volume exists). */
 function toVolBars(bars: OhlcBar[]): VolBar[] {
   return bars.map((bar) => ({
     time: bar.time,
     value: ((bar.high - bar.low) / bar.open) * 10_000,
     color:
       bar.close >= bar.open
-        ? "rgba(46,230,166,0.28)"
-        : "rgba(255,92,122,0.22)",
+        ? "rgba(46,230,166,0.25)"
+        : "rgba(255,92,122,0.20)",
   }))
 }
 
-// ── Chart panel ──────────────────────────────────────────────────────────────
+// ── Chart panel ───────────────────────────────────────────────────────────────
 
 export function ChartPanel() {
   const [selectedPairIndex, setSelectedPairIndex] = useState(0)
@@ -92,8 +91,9 @@ export function ChartPanel() {
 
   return (
     <Card className="border-border-subtle bg-bg-panel border-top-accent">
+      {/* ── Toolbar row ── */}
       <CardHeader className="px-4 pb-2 pt-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-4">
           {/* Pair tabs */}
           <div className="flex items-center gap-0.5">
             {FX_PAIRS.map((pair, i) => (
@@ -112,39 +112,16 @@ export function ChartPanel() {
             ))}
           </div>
 
-          {/* Live price + 24h change */}
-          {livePrice ? (
-            <div className="flex items-baseline gap-2">
-              <span className="font-mono text-base font-semibold tabular-nums text-text-primary">
-                {formatPrice(livePrice.value, selectedPair.displayDecimals)}
-              </span>
-              {change24h !== null && (
-                <span
-                  className={cn(
-                    "font-mono text-xs tabular-nums",
-                    direction === "positive" && "text-state-positive",
-                    direction === "negative" && "text-state-negative",
-                    direction === "neutral" && "text-text-muted",
-                  )}
-                >
-                  {formatChange(change24h)}
-                </span>
-              )}
-            </div>
-          ) : (
-            <div className="h-5 w-28 animate-pulse rounded bg-bg-elevated" />
-          )}
-
           {/* Timeframe selector */}
-          <div className="flex items-center gap-0.5 rounded-lg bg-bg-elevated p-0.5">
+          <div className="flex items-center rounded-lg bg-bg-elevated p-0.5">
             {CHART_TIMEFRAMES.map((tf) => (
               <button
                 key={tf.label}
                 onClick={() => setSelectedTimeframe(tf)}
                 className={cn(
-                  "rounded px-2.5 py-1 font-mono text-[11px] tracking-wider transition-colors",
+                  "rounded px-2.5 py-1 font-mono text-[11px] tracking-wider transition-all",
                   tf.label === selectedTimeframe.label
-                    ? "bg-bg-panel text-text-primary shadow-sm"
+                    ? "bg-brand-primary/15 text-brand-primary font-semibold"
                     : "text-text-muted hover:text-text-secondary",
                 )}
               >
@@ -155,14 +132,46 @@ export function ChartPanel() {
         </div>
       </CardHeader>
 
+      {/* ── Chart area ── */}
       <CardContent className="p-0">
-        <CandlestickChart bars={bars} isLoading={isLoading} isError={isError} />
+        <div className="relative h-[28rem] w-full">
+          {/* Price overlay — top-left, large, non-interactive */}
+          <div className="absolute left-4 top-3 z-10 pointer-events-none select-none">
+            {livePrice ? (
+              <div className="flex items-baseline gap-2.5">
+                <span className="font-mono text-4xl font-bold tabular-nums tracking-tight text-text-primary">
+                  {formatPrice(livePrice.value, selectedPair.displayDecimals)}
+                </span>
+                {change24h !== null && (
+                  <span
+                    className={cn(
+                      "font-mono text-sm font-semibold tabular-nums",
+                      direction === "positive" && "text-state-positive",
+                      direction === "negative" && "text-state-negative",
+                      direction === "neutral" && "text-text-muted",
+                    )}
+                  >
+                    {formatChange(change24h)}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="h-10 w-40 animate-pulse rounded-lg bg-bg-elevated" />
+            )}
+          </div>
+
+          <CandlestickChart
+            bars={bars}
+            isLoading={isLoading}
+            isError={isError}
+          />
+        </div>
       </CardContent>
     </Card>
   )
 }
 
-// ── Inner chart component ─────────────────────────────────────────────────────
+// ── Inner chart ───────────────────────────────────────────────────────────────
 
 interface CandlestickChartProps {
   bars: OhlcBar[]
@@ -176,7 +185,7 @@ function CandlestickChart({ bars, isLoading, isError }: CandlestickChartProps) {
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null)
   const volumeRef = useRef<ISeriesApi<"Histogram"> | null>(null)
 
-  // Create chart + series once on mount
+  // Create chart once on mount
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -190,30 +199,32 @@ function CandlestickChart({ bars, isLoading, isError }: CandlestickChartProps) {
         fontSize: 11,
       },
       grid: {
-        vertLines: { color: "rgba(255,255,255,0.035)" },
-        horzLines: { color: "rgba(255,255,255,0.035)" },
+        // Near-invisible grid — just enough to orient the eye
+        vertLines: { color: "rgba(255,255,255,0.022)" },
+        horzLines: { color: "rgba(255,255,255,0.022)" },
       },
       crosshair: {
         horzLine: {
-          color: "rgba(255,182,221,0.4)",
+          color: "rgba(255,182,221,0.45)",
           labelBackgroundColor: "#2A1436",
           width: 1,
           style: 2,
         },
         vertLine: {
-          color: "rgba(255,182,221,0.4)",
+          color: "rgba(255,182,221,0.45)",
           labelBackgroundColor: "#2A1436",
           width: 1,
           style: 2,
         },
       },
       rightPriceScale: {
-        borderColor: "rgba(255,255,255,0.06)",
+        borderColor: "rgba(255,255,255,0.05)",
         textColor: "#A892AD",
-        scaleMargins: { top: 0.06, bottom: 0.26 },
+        // Leave room at top for the price overlay text, bottom for volume
+        scaleMargins: { top: 0.18, bottom: 0.26 },
       },
       timeScale: {
-        borderColor: "rgba(255,255,255,0.06)",
+        borderColor: "rgba(255,255,255,0.05)",
         timeVisible: true,
         secondsVisible: false,
         fixRightEdge: true,
@@ -222,10 +233,8 @@ function CandlestickChart({ bars, isLoading, isError }: CandlestickChartProps) {
 
     chartRef.current = chart
 
-    // Candlestick series on the default right price scale
     seriesRef.current = chart.addSeries(CandlestickSeries, CANDLE_STYLE)
 
-    // Volume histogram on its own isolated scale
     volumeRef.current = chart.addSeries(HistogramSeries, VOLUME_STYLE)
     volumeRef.current.priceScale().applyOptions({
       scaleMargins: { top: 0.82, bottom: 0 },
@@ -239,7 +248,7 @@ function CandlestickChart({ bars, isLoading, isError }: CandlestickChartProps) {
     }
   }, [])
 
-  // Push new bar data whenever `bars` changes
+  // Update data when bars change
   useEffect(() => {
     if (!seriesRef.current || !volumeRef.current || bars.length === 0) return
     seriesRef.current.setData(bars)
@@ -248,35 +257,30 @@ function CandlestickChart({ bars, isLoading, isError }: CandlestickChartProps) {
   }, [bars])
 
   return (
-    <div className="relative h-[26rem] w-full">
-      <div ref={containerRef} className="absolute inset-0" />
+    <div className="absolute inset-0">
+      <div ref={containerRef} className="h-full w-full" />
 
       {/* Loading skeleton */}
       {isLoading && (
-        <div className="absolute inset-0 p-4">
-          <Skeleton className="h-full w-full rounded-none opacity-30" />
+        <div className="absolute inset-0 p-6 pt-16">
+          <Skeleton className="h-full w-full rounded-none opacity-20" />
         </div>
       )}
 
-      {/* Error state */}
+      {/* Error state — subtle, not alarming */}
       {isError && !isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <p className="font-mono text-xs text-state-negative">
-              Chart data unavailable
-            </p>
-            <p className="mt-1 font-mono text-[10px] text-text-muted">
-              Unable to load price history
-            </p>
-          </div>
+          <p className="font-mono text-xs text-text-muted">
+            Price history unavailable
+          </p>
         </div>
       )}
 
-      {/* Empty bars after load */}
+      {/* Empty bars after successful load */}
       {!isLoading && !isError && bars.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
           <p className="font-mono text-xs text-text-muted">
-            No data available for this timeframe
+            No data for this timeframe
           </p>
         </div>
       )}

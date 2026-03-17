@@ -45,9 +45,8 @@ export function Header() {
           })}
         </nav>
 
-        {/* Right: Network status + Wallet */}
-        <div className="ml-auto flex items-center gap-3">
-          <NetworkStatus />
+        {/* Right: Wallet only */}
+        <div className="ml-auto">
           <Button
             size="sm"
             variant="outline"
@@ -58,19 +57,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
-}
-
-function NetworkStatus() {
-  return (
-    <div className="hidden items-center gap-2 rounded-md border border-border-subtle bg-bg-elevated px-3 py-1.5 sm:flex">
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-state-positive opacity-60" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-state-positive" />
-      </span>
-      <span className="font-mono text-[11px] tracking-wider text-text-muted">
-        Live
-      </span>
-    </div>
   )
 }

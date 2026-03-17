@@ -10,12 +10,11 @@ import { useSwapQuote } from "@/web3/hooks/useSwapQuote"
 import { useWallet } from "@/web3/hooks/useWallet"
 import { useWalletActions } from "@/web3/hooks/useWalletActions"
 import {
-  TOKENS,
   FX_TOKEN_SYMBOLS,
   QUOTE_TOKEN_SYMBOL,
   type TokenSymbol,
 } from "@/web3/constants/tokens"
-import { TokenSelectorModal } from "./TokenSelectorModal"
+import { TokenSelectorModal, TokenIcon } from "./TokenSelectorModal"
 
 const ALL_SWAP_TOKENS: TokenSymbol[] = [...FX_TOKEN_SYMBOLS, QUOTE_TOKEN_SYMBOL]
 const SLIPPAGE_OPTIONS = [0.1, 0.5, 1.0]
@@ -222,11 +221,9 @@ function AmountBox({
         />
         <button
           onClick={onTriggerSelect}
-          className="flex shrink-0 items-center gap-1.5 rounded-xl border border-border-subtle bg-bg-panel px-3 py-2 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/5"
+          className="flex shrink-0 items-center gap-2 rounded-xl border border-border-subtle bg-bg-panel px-2.5 py-2 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/5"
         >
-          <span className="font-mono text-base leading-none">
-            {TOKENS[symbol].logoSymbol}
-          </span>
+          <TokenIcon symbol={symbol} size="sm" />
           <span className="font-mono text-sm font-semibold text-text-primary">
             {symbol}
           </span>
