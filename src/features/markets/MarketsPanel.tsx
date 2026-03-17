@@ -83,7 +83,7 @@ export function MarketsPanel() {
               const change24h =
                 livePrice && historicalPrice && !historicalLoading
                   ? ((livePrice.value - historicalPrice) / historicalPrice) *
-                    100
+                  100
                   : null
 
               return (

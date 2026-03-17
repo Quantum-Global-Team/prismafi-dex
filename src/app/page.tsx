@@ -1,5 +1,5 @@
 import { MarketsPanel } from "@/features/markets/MarketsPanel"
-import { ChartPanelShell } from "@/features/charts/ChartPanelShell"
+import { ChartPanel } from "@/features/charts/ChartPanel"
 import { SwapPanelShell } from "@/features/swap/SwapPanelShell"
 import { PortfolioPanelShell } from "@/features/portfolio/PortfolioPanelShell"
 
@@ -11,7 +11,7 @@ export default function TradingPage() {
 
       {/* Right column — chart + swap + portfolio */}
       <div className="flex flex-col gap-4">
-        <ChartPanelShell />
+        <ChartPanel />
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           <SwapPanelShell />
           <PortfolioPanelShell />
