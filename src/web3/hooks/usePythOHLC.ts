@@ -1,13 +1,14 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
+import type { UTCTimestamp } from "lightweight-charts"
 import { PYTH_BENCHMARKS_URL } from "@/web3/constants/chartConfig"
 import type { Timeframe } from "@/web3/constants/chartConfig"
 
 /** A single OHLC bar formatted for lightweight-charts v5. */
 export interface OhlcBar {
-  /** Unix timestamp in seconds */
-  time: number
+  /** UTC timestamp in seconds, branded as UTCTimestamp for lightweight-charts */
+  time: UTCTimestamp
   open: number
   high: number
   low: number
@@ -89,7 +90,7 @@ export function usePythOHLC(
       }
 
       const parsed: OhlcBar[] = data.t.map((time, i) => ({
-        time,
+        time: time as UTCTimestamp,
         open: data.o[i],
         high: data.h[i],
         low: data.l[i],

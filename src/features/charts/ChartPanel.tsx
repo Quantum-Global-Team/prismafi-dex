@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import {
   createChart,
   CandlestickSeries,
+  ColorType,
   type IChartApi,
   type ISeriesApi,
   type CandlestickSeriesOptions,
@@ -12,7 +13,7 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
-import { usePythOHLC } from "@/web3/hooks/usePythOHLC"
+import { usePythOHLC, type OhlcBar } from "@/web3/hooks/usePythOHLC"
 import { usePythPrices } from "@/web3/hooks/usePythPrices"
 import { usePyth24hChange } from "@/web3/hooks/usePyth24hChange"
 import {
@@ -131,7 +132,7 @@ export function ChartPanel() {
 }
 
 interface CandlestickChartProps {
-  bars: { time: number; open: number; high: number; low: number; close: number }[]
+  bars: OhlcBar[]
   isLoading: boolean
   isError: boolean
 }
@@ -149,7 +150,7 @@ function CandlestickChart({ bars, isLoading, isError }: CandlestickChartProps) {
     const chart = createChart(el, {
       autoSize: true,
       layout: {
-        background: { type: "solid", color: "transparent" },
+        background: { type: ColorType.Solid, color: "transparent" },
         textColor: "#A892AD",
         fontFamily: "monospace",
         fontSize: 11,

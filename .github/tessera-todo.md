@@ -444,25 +444,25 @@ src/
 ## 11. Charts feature
 
 ### 11.1 Chart wrapper
-- [ ] integrate `lightweight-charts`
-- [ ] create reusable chart component
-- [ ] isolate chart setup from page code
-- [ ] support dynamic pair changes
-- [ ] support dynamic timeframe changes
+- [x] integrate `lightweight-charts`
+- [x] create reusable chart component
+- [x] isolate chart setup from page code
+- [x] support dynamic pair changes
+- [x] support dynamic timeframe changes
 
 ### 11.2 Chart theming
-- [ ] apply Rose-black background
-- [ ] apply semantic candle colors
-- [ ] tone down grid opacity
-- [ ] style axes with muted text color
-- [ ] remove visual clutter
+- [x] apply Rose-black background
+- [x] apply semantic candle colors
+- [x] tone down grid opacity
+- [x] style axes with muted text color
+- [x] remove visual clutter
 
 ### 11.3 Chart UX
-- [ ] loading skeleton
-- [ ] no-data state
-- [ ] pair switch behavior
-- [ ] resize handling
-- [ ] safe unmount cleanup
+- [x] loading skeleton
+- [x] no-data state
+- [x] pair switch behavior
+- [x] resize handling
+- [x] safe unmount cleanup
 
 ---
 
